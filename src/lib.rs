@@ -1,57 +1,44 @@
+#[doc = include_str!("../README.md")]
+
 /// Define a const map and a const lookup function as associated items of a struct.
 ///
-/// When used, if the argument to the lookup function is a constant, the whole lookup will be done
-/// at compile-time and replaced with the resulting constant.
+/// The syntax is:
+/// ```no_run
+/// use const_map::const_map;
 ///
-/// If the argument is not a constant, it will still work, but won't be as efficient as an ordinary
-/// map, because the lookup is just iterating all elements of the map.
+/// # // placeholders to make the example compile
+/// # type KeyType = i32;
+/// # type ValueType = i32;
+/// # const key1: i32 = 0;
+/// # const key2: i32 = 0;
+/// # const value1: i32 = 0;
+/// # const value2: i32 = 0;
 ///
-/// # Example:
-/// ```
-/// # #[macro_use] extern crate const_map;
-/// struct Fruits {
-///     name: String,
-/// }
+/// struct YourStruct { /* ... */ }
 ///
-/// impl Fruits {
-///     const_map!(MAP, get(), (char => &'static str) {
-///         'a' => "apple",
-///         'b' => "banana",
-///         'c' => "clementine",
-///         'd' => "durian",
-///     });
-///     
-///     fn new(name: &str) -> Self {
-///         if let Some(s) = Self::get(name.chars().next().expect("shouldn't be empty")) {
-///             Self { name: s.to_owned() }
-///         } else {
-///             Self { name: name.to_owned() }
+/// impl YourStruct {
+///     const_map!(
+///         // The name of the associated constant holding the map.
+///         // It will have type `[(KeyType, ValueType); N]` where `N` is the number of elements.
+///         NAME,
+///
+///         // The name of the lookup function.
+///         // It will have signature `const fn(k: KeyType) -> Option<ValueType>`.
+///         lookup(),
+///
+///         // Specify the types of the keys and values of the map.
+///         (KeyType => ValueType) {
+///
+///             // Followed by the entries of the map, which must be expressions that can be
+///             // evaluated in a const (compile-time) context.
+///             key1 => value1,
+///             key2 => value2,
+///             // etc.
 ///         }
-///     }
+///     );
+///
+///     // ...
 /// }
-///
-/// assert_eq!(Fruits::new("bread").name, "banana");
-/// assert_eq!(Fruits::new("kiwi").name, "kiwi");
-///
-/// // Because the lookup is a `const fn`, it can be used with generic consts:
-///
-/// struct MyFruit<const C: char> {
-///     count: u64,
-/// }
-///
-/// impl<const C: char> MyFruit<C> {
-///     const NAME: &'static str = match Fruits::get(C) {
-///         Some(s) => s,
-///         None => panic!("no fruit found"),
-///     };
-///
-///     pub fn desc(&self) -> String {
-///         format!("{} {}", self.count, Self::NAME)
-///     }
-/// }
-///
-/// let f = MyFruit::<'d'> { count: 42 };
-/// assert_eq!(f.desc(), "42 durian");
 /// ```
 #[macro_export]
 macro_rules! const_map {
