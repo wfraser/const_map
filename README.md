@@ -14,8 +14,9 @@ to be an integral type, bool, or char, because other types don't implement `Part
 way yet.
 
 # Example:
-```
-# #[macro_use] extern crate const_map;
+```rust
+use const_map::const_map;
+
 struct Fruits {
     name: String,
 }
