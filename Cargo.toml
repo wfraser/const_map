@@ -1,7 +1,12 @@
 [package]
 name = "const_map"
-description = "Macro to define compile-time constant maps"
+description = "Macro to define compile-time associated constant maps"
+authors = ["Bill Fraser <wfraser@codewise.org>"]
+repository = "https://github.com/wfraser/const_map"
+documentation = "https://docs.rs/const_map"
+readme = "README.md"
 version = "0.1.0"
 edition = "2021"
+license = "MIT/Apache-2.0"
 
 [dependencies]
