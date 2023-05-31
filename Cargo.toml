@@ -1,0 +1,7 @@
+[package]
+name = "const_map"
+description = "Macro to define compile-time constant maps"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
