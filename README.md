@@ -9,6 +9,10 @@ at compile-time and replaced with the resulting constant.
 If the argument is not a constant, it will still work, but won't be as efficient as an ordinary
 map, because the lookup is just iterating all elements of the map.
 
+Note that due to current limitations in the Rust standard library and compiler, the key type needs
+to be an integral type, bool, or char, because other types don't implement `PartialEq` in a const
+way yet.
+
 # Example:
 ```
 # #[macro_use] extern crate const_map;
