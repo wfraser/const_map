@@ -43,10 +43,10 @@
 /// ```
 #[macro_export]
 macro_rules! const_map {
-    ($name:ident, $lookup:ident(), ($kty:ty => $vty:ty) { $($k:expr => $v:expr),* $(,)? }) => {
-        pub const $name: [($kty, $vty); $crate::count!($(($k, $v))*)] = [$(($k, $v)),*];
+    ($name_vis:vis $name:ident, $lookup_vis:vis $lookup:ident(), ($kty:ty => $vty:ty) { $($k:expr => $v:expr),* $(,)? }) => {
+        $name_vis const $name: [($kty, $vty); $crate::count!($(($k, $v))*)] = [$(($k, $v)),*];
 
-        const fn $lookup(key: $kty) -> Option<$vty> {
+        $lookup_vis const fn $lookup(key: $kty) -> Option<$vty> {
             #[inline]
             const fn find(pairs: &[($kty, $vty)], key: $kty, n: usize) -> Option<$vty> {
                 if n >= pairs.len() {
@@ -74,7 +74,7 @@ mod test {
     struct S1;
 
     impl S1 {
-        const_map!(MAP, map_get(), (char => &'static str) {
+        const_map!(pub MAP, pub map_get(), (char => &'static str) {
             'a' => "apple",
             'b' => "banana",
             'c' => "clementine",
